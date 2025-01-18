@@ -3,11 +3,13 @@ import { writeContacts } from '../utils/writeContacts.js';
 
 export const removeLastContact = async () => {
   try {
-    const contacts = await readContacts();
-    const updatedContacts = contacts.slice(0, contacts.length - 1);
-    await writeContacts(updatedContacts);
-  } catch (error) {
-    console.log(error);
+    const data = JSON.parse(await readContacts());
+    if (!data.length) return console.log(data);
+    data.pop();
+    await writeContacts(data);
+    console.log(`${data.length} contacts in DataBase`);
+  } catch (e) {
+    console.log(e.message);
   }
 };
 

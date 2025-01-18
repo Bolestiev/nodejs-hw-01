@@ -1,20 +1,19 @@
-import { writeContacts } from '../utils/writeContacts.js';
 import { createFakeContact } from '../utils/createFakeContact.js';
 import { readContacts } from '../utils/readContacts.js';
+import { writeContacts } from '../utils/writeContacts.js';
 
 const generateContacts = async (number) => {
   try {
-    const existingContacts = await readContacts();
-    const newContacts = [];
-
-    for (let i = 0; i < number; i += 1) {
-      newContacts.push(createFakeContact());
-    }
-
-    await writeContacts([...existingContacts, ...newContacts]);
-  } catch (error) {
-    console.log(error);
+    const data = JSON.parse(await readContacts());
+    const newContacts = Array.from({ length: number }, () =>
+      createFakeContact(),
+    );
+    data.push(...newContacts);
+    await writeContacts(data);
+    console.log(`${number} contacts successfully generated and saved.`);
+  } catch (e) {
+    console.error('Error in generating or saving contacts:', e.message);
   }
 };
 
-generateContacts(5);
+generateContacts(3);
